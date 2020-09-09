@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+                    <!--This Is All That Will Display In Browser-->
+    <div class="main_div"> 
+        
+        <div class="music_container">
+
+            <div class="artistsong_container">
+                <h2 id="title">Song Name</h2>
+                <h3 id="artist">Song Singer Name</h3>
+            </div>
+
+            <div class="image_container">
+                <img src="images/song-1.jpg" alt="">
+            </div>
+            <audio src="musics/song-1.mp3"></audio>
+            <div class="music_controls">
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-play"     id="play" title="Play"></i>
+                <i class="fas fa-forward"  id="next" title="Next"></i>
+            </div>
+
+        </div>
+
+    </div>
+                    <!--This Is All That Will Display In Browser-->
+                    <!--****************************************-->
+                    <!--This Is All The Script That Works In Background-->
+    <script>
+
+        //Variables Creation---------------------------------/
+        const music =  document.querySelector("audio");
+        const img = document.querySelector("img");  
+        const play = document.getElementById("play");
+        const title = document.getElementById("title");
+        const artist = document.getElementById("artist");
+        const next = document.getElementById("next");
+        const prev = document.getElementById("prev");
+
+        //Required Data That Changes With Buttons---------------------------------/
+        const songsList = [
+
+            {
+                name:"song-1", title:"Kalimba", artist:"MR.Scruff",
+            },
+
+            {
+                name:"song-2", title:"Sleep Away", artist:"Bob Acri",
+            },
+
+            {
+                name:"song-3", title:"Made With The Flaxen Air", artist:"Richard Stoltzman",
+            },
+
+        ];
+
+        //Functions To Perform Play And Pause---------------------------------/
+        let isPlaying = false;
+        //Play Function
+        const playMusic = () => {
+            isPlaying = true;
+            music.play();
+            play.classList.replace("fa-play","fa-pause");
+            img.classList.add("anime");
+        };
+        //Pause Function
+        const pauseMusic = () => {
+            isPlaying = false;
+            music.pause();
+            play.classList.replace("fa-pause","fa-play");
+            img.classList.remove("anime");
+        };
+            //Selecting Play Pause Function On Clicking The Button
+            play.addEventListener('click', () => {
+                if(isPlaying){
+                    pauseMusic();
+                }
+                else{
+                    playMusic();
+                }
+            });
+        //Functions To Perform Next And Previous---------------------------------/
+
+        //Song And It's Detail Loading Function
+        const loadSong = (songsList) => {
+            title.textContent = songsList.title;
+            artist.textContent = songsList.artist;
+            music.src= "musics/" + songsList.name + ".mp3";
+            img.src= "images/" + songsList.name + ".jpg";
+        };
+        //Start Up Screen
+        songIndex = 0;
+        loadSong(songsList[songIndex]);
+        //Next Song Playing Function
+        const nextSong = () =>{
+            songIndex = (songIndex + 1) % songsList.length;
+            loadSong(songsList[songIndex]);
+            playMusic();
+        }
+        //Prev Song Playing Function
+        const prevSong = () =>{
+            songIndex = (songIndex - 1 + songsList.length) % songsList.length; //What This Does Is It'll Decrement The Value But Save From Out Of Bound Situation
+            loadSong(songsList[songIndex]);
+            playMusic();
+        }
+            //Selecting Next And Previous Song On Button Click
+            next.addEventListener("click", nextSong);
+            prev.addEventListener("click", prevSong);
+    </script>
+</body>
+</html>
